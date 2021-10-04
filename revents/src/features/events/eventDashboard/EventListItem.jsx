@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Icon, Item, ItemContent, List, Segment } from 'semantic-ui-react';
+import { Button, Icon, Item, ItemContent, List, Segment, Image } from 'semantic-ui-react';
 import EventListAttendee from './EventListAttendee';
 
 export default function EventListItem(){
@@ -8,7 +8,7 @@ export default function EventListItem(){
             <Segment>
                 <Item.Group>
                     <Item>
-                        <Item.Image size='tiny' circular src='/assests/user.png'/>
+                        <Item.Image size='tiny' circular src='/assets/user.png'/>
                         <ItemContent>
                             <Item.Header content='Event Title'/>
                             <Item.Description>
