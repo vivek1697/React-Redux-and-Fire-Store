@@ -2,17 +2,17 @@ import React from 'react';
 import { Button, Icon, Item, ItemContent, List, Segment, Image } from 'semantic-ui-react';
 import EventListAttendee from './EventListAttendee';
 
-export default function EventListItem(){
+export default function EventListItem({event}){
     return(
         <Segment.Group>
             <Segment>
                 <Item.Group>
                     <Item>
-                        <Item.Image size='tiny' circular src='/assets/user.png'/>
+                        <Item.Image size='tiny' circular src={event.hostPhotoURL}/>
                         <ItemContent>
-                            <Item.Header content='Event Title'/>
+                            <Item.Header content={event.title}/>
                             <Item.Description>
-                                Hosted By Bob
+                                Hosted By {event.hostedBy}
                             </Item.Description>
                         </ItemContent>
                     </Item>
@@ -20,21 +20,21 @@ export default function EventListItem(){
             </Segment>
             <Segment>
                 <span>
-                    <Icon name='clock'/> Date
-                    <Icon name='marker'/> Venue
+                    <Icon name='clock'/> {event.date}
+                    <Icon name='marker'/> {event.venue}
                 </span>
             </Segment>
             <Segment secondary>
                 <List horizontal>
-                    <EventListAttendee/>
-                    <EventListAttendee/>
-                    <EventListAttendee/>
+                    {event.attendees.map(attendee =>(
+                        <EventListAttendee key={attendee.id} attendee={attendee}/>
+                    ))}
                 </List>
 
             </Segment>
             <Segment clearing>
                 <div>
-                    Description of Event
+                    {event.description}
                 </div>
                 <Button color='teal' floated='right' content='View'/>
             </Segment>
