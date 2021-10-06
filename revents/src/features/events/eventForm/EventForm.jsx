@@ -2,7 +2,7 @@ import cuid from 'cuid';
 import React, { useState } from 'react';
 import { Segment, Header, Form, Button } from 'semantic-ui-react';
 
-export default function EventForm({setFormOpen, setEvents, createEvent, selectedEvent}){
+export default function EventForm({setFormOpen, setEvents, createEvent, selectedEvent, updateEvent}){
 
     const intialValues = selectedEvent ?? {
         title: '',
@@ -17,13 +17,16 @@ export default function EventForm({setFormOpen, setEvents, createEvent, selected
 
 
     function handleFormSubmit(){
-        createEvent({
-          ...values,
-          id: cuid(),
-          hostedBy: "Bob",
-          attendees: [],
-          hostPhotoURL: "/assets/user.png",
-        });
+
+        selectedEvent
+          ? updateEvent({...selectedEvent, ...values})
+          : createEvent({
+              ...values,
+              id: cuid(),
+              hostedBy: "Bob",
+              attendees: [],
+              hostPhotoURL: "/assets/user.png",
+            });
         setFormOpen(false);
     }
 
