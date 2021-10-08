@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 
 import EventDashboard from '../../features/events/eventDashboard/EventDashboard';
 import NavBar from '../../features/nav/NavBar';
@@ -9,22 +9,7 @@ import EventDetailPage from '../../features/events/eventDetailed/EventDetailedPa
 import EventForm from '../../features/events/eventForm/EventForm';
 
 function App() {
-  const [formOpen, setFormOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState(null);
-
-  function handleSelectEvent(event){
-    setSelectedEvent(event);
-    setFormOpen(true);
-  }
-
-  function handleCreateFormOpen() {
-    setSelectedEvent(null);
-    setFormOpen(true);
-    
-  }
-
-
-
+  
   return (
     <div>
       <Route exact path="/" component={Homepage} />
@@ -32,11 +17,11 @@ function App() {
         path={"/(.+)"}
         render={() => (
           <div>
-            <NavBar setFormOpen={handleCreateFormOpen} />
+            <NavBar  />
             <Container className="main">
               <Route exact path="/events" component={EventDashboard} />
               <Route path="/events/:id" component={EventDetailPage} />
-              <Route path="/createEvent" component={EventForm} />
+              <Route path={["/createEvent", "manage/:id"]} component={EventForm} />
             </Container>
           </div>
         )}
