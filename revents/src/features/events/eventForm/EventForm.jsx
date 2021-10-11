@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Segment, Header, Form, Button, FormField } from 'semantic-ui-react';
+import { Segment, Header, Form, Button } from 'semantic-ui-react';
 import cuid from 'cuid';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { createEvent, updateEvent } from '../eventActions';
-import { Field, Formik } from 'formik';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import MyTextInput from '../../../app/common/form/MyTextInput';
 
 export default function EventForm({ match, history }) {
   const dispatch = useDispatch();
@@ -21,55 +23,45 @@ export default function EventForm({ match, history }) {
     date: "",
   };
 
-  const [values, setValues] = useState(initialValues);
+  const validationSchema = Yup.object({
+    title: Yup.string().required('You must provide a title'),
+    category: Yup.string().required('You must provide a category'),
+    description: Yup.string().required('You must provide a description'),
+    city: Yup.string().required('You must provide a city'),
+    venue: Yup.string().required('You must provide a venue'),
+    date: Yup.string().required('You must provide a date')
+  })
 
-  function handleFormSubmit() {
-    selectedEvent
-      ? dispatch(updateEvent({ ...selectedEvent, ...values }))
-      : dispatch(
-          createEvent({
-            ...values,
-            id: cuid(),
-            hostedBy: "Bob",
-            attendees: [],
-            hostPhotoURL: "/assets/user.png",
-          })
-        );
-    history.push("/events");
-  }
 
-  function handleInputChange(e) {
-    const { name, value } = e.target;
-    setValues({ ...values, [name]: value });
-  }
 
   return (
     <Segment clearing>
-      <Header content={selectedEvent ? "Edit the event" : "Create new event"} />
+      
       <Formik
         initialValues={initialValues}
-        onSubmit={(values) => console.log(values)}
+        validationSchema={validationSchema}
+        onSubmit={(values) => {selectedEvent
+          ? dispatch(updateEvent({ ...selectedEvent, ...values }))
+          : dispatch(
+              createEvent({
+                ...values,
+                id: cuid(),
+                hostedBy: "Bob",
+                attendees: [],
+                hostPhotoURL: "/assets/user.png",
+              })
+            );
+        history.push("/events");}}
       >
         <Form className="ui form">
-          <FormField>
-            <Field placeholder="Event title" name="title" />
-          </FormField>
-          <FormField>
-            <Field placeholder="Category" name="category" />
-          </FormField>
-          <FormField>
-            <Field placeholder="Description" name="description" />
-          </FormField>
-          <FormField>
-            <Field placeholder="City" name="city" />
-          </FormField>
-          <FormField>
-            <Field placeholder="Venue" name="venue" />
-          </FormField>
-          <FormField>
-            <Field placeholder="Date" name="date" type="date" />
-          </FormField>
-
+          <Header sub color='teal' content='EventDetails' />
+          <MyTextInput name='title' placeholder='Event title'/>
+          <MyTextInput name='category' placeholder='Category'/>
+          <MyTextInput name='description' placeholder='Description'/>
+          <Header sub color='teal' content='Event Location Details ' />
+          <MyTextInput name='city' placeholder='City'/>
+          <MyTextInput name='venue' placeholder='Venue'/>
+          <MyTextInput name='date' placeholder='Event Date' type='date'/>
           <Button type="submit" floated="right" positive content="Submit" />
           <Button
             as={Link}
